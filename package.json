@@ -1,11 +1,19 @@
 {
-  "name": "fieldsetui",
+  "name": "dadditui",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.5.1",
+    "@material-ui/icons": "^4.5.1",
+    "apisauce": "^1.1.1",
+    "firebase": "^7.2.2",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "react-scripts": "3.2.0"
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.2.0",
+    "typeface-comfortaa": "0.0.76",
+    "typeface-open-sans": "0.0.75",
+    "typeface-roboto": "0.0.75"
   },
   "scripts": {
     "start": "react-scripts start",
