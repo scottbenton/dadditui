@@ -12,14 +12,16 @@
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.2.0",
     "typeface-comfortaa": "0.0.76",
-    "typeface-open-sans": "0.0.75",
-    "typeface-roboto": "0.0.75"
+    "typeface-ibm-plex-sans": "0.0.75",
+    "typeface-open-sans": "0.0.75"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "react-scripts build",
+    "deploy": "firebase deploy"
   },
   "eslintConfig": {
     "extends": "react-app"

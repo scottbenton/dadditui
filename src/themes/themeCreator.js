@@ -14,6 +14,8 @@ export const themes = {
   lightBlue: lightBlueTheme
 }
 
+export const DEFAULT_THEME = 'lightBlue';
+
 export const constructMuiTheme = theme => createMuiTheme({
   palette: {
     type: theme.type,

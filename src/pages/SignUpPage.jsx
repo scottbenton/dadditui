@@ -12,7 +12,7 @@ import { AuthPage } from 'components/shared/AuthPage';
 
 import { updateStateObjectByKey } from 'utilities/StateHelpers';
 import { validateEmail } from 'utilities/stringHelpers';
-import { useAuth } from 'api/auth';
+import { useAuth } from 'api/firebase';
 
 const useStyles = makeStyles(theme => ({
   title: {

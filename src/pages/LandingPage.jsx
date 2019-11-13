@@ -7,8 +7,8 @@ import {
 
 import { FullPage } from 'components/shared/FullPage';
 import { PAGES } from 'constants/Pages';
-import { useCurrentUser } from 'api/auth/FirebaseUser';
-import { useAuth } from 'api/auth/FirebaseContext';
+import { useCurrentUser } from 'api/firebase/FirebaseUser';
+import { useAuth } from 'api/firebase/FirebaseContext';
 
 const useStyles = makeStyles(theme => ({
   button: {

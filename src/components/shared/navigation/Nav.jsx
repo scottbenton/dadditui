@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { NavBar } from './NavBar';
 import { NavPage } from './NavPage';
-import { useCurrentUser } from 'api/auth';
+import { useCurrentUser } from 'api/firebase';
 import { CircularProgress } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({

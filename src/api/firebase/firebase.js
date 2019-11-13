@@ -1,5 +1,6 @@
 import app from 'firebase/app';
 import 'firebase/auth';
+import 'firebase/database';
 
 const config = {
   apiKey: "AIzaSyCecX05DOBjhu0TRzE4JXvdn0bxIuPDuzc",
@@ -13,9 +14,12 @@ const config = {
 
 class Firebase {
   constructor() {
-    app.initializeApp(config);
+    if (!app.apps.length) {
+      app.initializeApp(config);
 
-    this.auth = app.auth();
+      this.auth = app.auth();
+      this.database = app.database();
+    }
   }
 
   // AUTHENTICATION API
@@ -44,6 +48,9 @@ class Firebase {
 
   doGetCurrentUserUID = () =>
     this.auth.currentUser ? this.auth.currentUser.uid : null;
+
+  doGetDatabase = () =>
+    this.database;
 
 }
 
