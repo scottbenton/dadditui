@@ -1,13 +1,19 @@
-import React from 'react';
-import { useAuth } from 'api/firebase/FirebaseContext';
+import React, { useEffect } from "react";
+import { useAuth } from "api/firebase/FirebaseContext";
 
 export function useCurrentUser() {
   const firebase = useAuth();
-  const [user, setUser] = React.useState();
+  const [user, setUser] = React.useState(null);
 
   firebase.auth.onAuthStateChanged(async authUser => {
-    setUser(authUser || null);
+    console.log(authUser);
+    setUser(authUser ? authUser : null);
   });
 
-  return user;
+  const updateUser = () => {
+    console.log(firebase.auth.currentUser);
+    setUser({ ...firebase.auth.currentUser });
+  };
+
+  return { user, setUser, updateUser };
 }

@@ -1,22 +1,20 @@
-import React from 'react';
-import { DEFAULT_THEME, themes, constructMuiTheme } from 'themes/themeCreator';
-import { ThemeProvider } from '@material-ui/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import React from "react";
+import { DEFAULT_THEME, themes, constructMuiTheme } from "themes/themeCreator";
+import { ThemeProvider } from "@material-ui/styles";
+import CssBaseline from "@material-ui/core/CssBaseline";
 
-import { BrowserRouter, Route } from 'react-router-dom';
-import { Nav } from 'components/shared/navigation/Nav';
+import { BrowserRouter, Route } from "react-router-dom";
+import { Nav } from "components/shared/navigation/Nav";
 
-import AuthInstance, { AuthContext } from 'api/firebase';
+import AuthInstance, { AuthContext } from "api/firebase";
 
-import { PAGES } from 'constants/Pages';
-import * as ROUTES from 'constants/routes';
-
+import { PAGES } from "constants/Pages";
+import * as ROUTES from "constants/routes";
 
 export function Daddit(props) {
   const myTheme = constructMuiTheme(themes[DEFAULT_THEME]);
 
-  const pageProps = {
-  };
+  const pageProps = {};
 
   return (
     <ThemeProvider theme={myTheme}>
@@ -25,11 +23,16 @@ export function Daddit(props) {
         <BrowserRouter>
           <Nav {...pageProps}>
             {Object.keys(PAGES).map(pageKey => (
-              <Route key={PAGES[pageKey].title} exact path={ROUTES[pageKey]} component={() => PAGES[pageKey].component(pageProps)} />
+              <Route
+                key={PAGES[pageKey].title}
+                exact
+                path={ROUTES[pageKey]}
+                component={() => PAGES[pageKey].component(pageProps)}
+              />
             ))}
           </Nav>
         </BrowserRouter>
       </AuthContext.Provider>
     </ThemeProvider>
-  )
+  );
 }
