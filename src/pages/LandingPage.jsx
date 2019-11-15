@@ -9,10 +9,19 @@ import { useAuth } from "api/firebase/FirebaseContext";
 import { OpenButton } from "components/shared/OpenButton";
 import { DialogWrapper } from "components/shared/DialogWrapper";
 import { CreateKid } from "components/daddit/kids/CreateKid";
+import LandingSplash from "resources/images/landingSplash.svg";
 
 const useStyles = makeStyles(theme => ({
   button: {
     margin: theme.spacing(1)
+  },
+  splash: {
+    display: "block",
+    marginTop: theme.spacing(3),
+    marginBottom: theme.spacing(3),
+    maxWidth: 600,
+    marginLeft: "auto",
+    marginRight: "auto"
   }
 }));
 
@@ -31,6 +40,8 @@ export function LandingPage(props) {
       <Typography variant="h5" color="textSecondary" gutterBottom>
         It's reddit, but for dads.
       </Typography>
+
+      <img src={LandingSplash} alt="" className={classes.splash} />
       {user ? (
         <>
           <Button
@@ -43,7 +54,8 @@ export function LandingPage(props) {
           </Button>
           <OpenButton
             buttonContent="Create a new Kid"
-            variant="outlined"
+            variant="contained"
+            color="primary"
             className={classes.button}
           >
             <DialogWrapper title="Create new Kid">

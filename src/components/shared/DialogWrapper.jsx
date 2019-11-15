@@ -9,7 +9,7 @@ export function DialogWrapper(props) {
   return (
     <Dialog open={open} onClose={() => setOpen(false)}>
       <DialogTitle>{title}</DialogTitle>
-      {React.cloneElement(children, { handleCancel: () => setOpen(false) })}
+      {React.cloneElement(children, { callback: () => setOpen(false) })}
     </Dialog>
   );
 }

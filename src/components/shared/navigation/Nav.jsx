@@ -4,7 +4,6 @@ import { NavBar } from "./NavBar";
 import { NavPage } from "./NavPage";
 import { useCurrentUser } from "api/firebase";
 import { CircularProgress } from "@material-ui/core";
-import { useAuth } from "api/firebase/FirebaseContext";
 
 const useStyles = makeStyles(theme => ({
   progress: {
@@ -18,8 +17,7 @@ export function Nav(props) {
   const classes = useStyles();
   const { children, ...otherProps } = props;
 
-  const { user, setUser } = useCurrentUser();
-  console.log(user, typeof user);
+  const { user } = useCurrentUser();
   return (
     <>
       {typeof user !== "undefined" ? (
