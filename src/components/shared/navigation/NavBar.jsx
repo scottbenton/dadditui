@@ -63,7 +63,7 @@ export function NavBar(props) {
             </Grid>
 
             <Grid item xs={6} sm={8} className={classes.iconHolder}>
-              {Object.values(PAGES)
+              {user && Object.values(PAGES)
                 .filter(page => page.navBar)
                 .map(page => (
                   <Tooltip key={page.title} title={page.title}>

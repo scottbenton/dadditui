@@ -15,6 +15,9 @@ import SignUpIcon from "@material-ui/icons/PersonAdd";
 import { BrowsePage } from "pages/BrowsePage";
 import BrowseIcon from "@material-ui/icons/Pageview";
 
+import { SubscriptionsPage } from "pages/SubscriptionsPage";
+import SubscriptionsIcon from "@material-ui/icons/RssFeed";
+
 export const PAGES = {
   LOGIN: {
     title: "Login",
@@ -55,5 +58,15 @@ export const PAGES = {
     )),
     component: props => <BrowsePage {...props} />,
     path: ROUTES.BROWSE
+  },
+  SUBSCRIPTIONS: {
+    title: "Subscriptions",
+    icon: <SubscriptionsIcon />,
+    navBar: true,
+    link: React.forwardRef((props, ref) => (
+      <Link to={ROUTES.SUBSCRIPTIONS} innerRef={ref} {...props} />
+    )),
+    component: props => <SubscriptionsPage {...props} />,
+    path: ROUTES.SUBSCRIPTIONS
   }
 };

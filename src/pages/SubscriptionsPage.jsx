@@ -5,11 +5,11 @@ import { useCurrentUser } from "api/firebase/FirebaseUser";
 
 import { ListKids } from "components/daddit/kids/ListKids";
 
-export function BrowsePage(props) {
+export function SubscriptionsPage(props) {
   const { database } = useDatabase();
   const { user } = useCurrentUser();
 
-  const [kids, setKids] = React.useState(null);
+  const [subscriptions, setSubscriptions] = React.useState(null);
 
   useEffect(() => {
     let ref;
@@ -17,13 +17,18 @@ export function BrowsePage(props) {
     const snapshotFunction = async snapshot => {
       const data = snapshot.val();
       if (data) {
-        console.log(data);
-        setKids(Object.values(data));
+        const keyArray = Object.values(data);
+        let subPromises = keyArray.map(key => {
+          return database.ref("kids/" + key).once("value", data => data.val());
+        });
+        const subSnapshots = await Promise.all(subPromises);
+        const subData = subSnapshots.map(subSnapshot => subSnapshot.val());
+        setSubscriptions(subData);
       }
     };
 
     if (user && database) {
-      ref = database.ref("kids");
+      ref = database.ref("users/" + user.uid + "/adoptions");
       ref.on("value", snapshotFunction);
     }
     return () => {
@@ -33,5 +38,5 @@ export function BrowsePage(props) {
     };
   }, [database, user]);
 
-  return <ListKids kids={kids} />;
+  return <ListKids kids={subscriptions} />;
 }

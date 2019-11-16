@@ -2,5 +2,6 @@ export const ROUTES = {
   LANDING: "/",
   SIGN_UP: "/signup",
   LOGIN: "/login",
-  BROWSE: "/browse"
+  BROWSE: "/browse",
+  SUBSCRIPTIONS: "/subscriptions"
 };
