@@ -32,6 +32,9 @@ const useStyles = makeStyles(theme => ({
   iconHolder: {
     display: "flex",
     justifyContent: "center"
+  },
+  appBar: {
+    borderTop: "6px solid " + theme.palette.primary.main
   }
 }));
 
@@ -42,7 +45,7 @@ export function NavBar(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="secondary">
+      <AppBar position="static" color="secondary" className={classes.appBar}>
         <Toolbar variant="dense">
           <Grid
             container
