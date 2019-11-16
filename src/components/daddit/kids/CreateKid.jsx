@@ -33,7 +33,7 @@ export function CreateKid(props) {
   const [loading, setLoading] = React.useState(false);
 
   const handleCreate = () => {
-    kidData.owners = [user.uid];
+    kidData.owners = { creator: user.uid };
     setLoading(true);
     database
       .ref("kids/" + kidData.name)
@@ -43,7 +43,16 @@ export function CreateKid(props) {
           database
             .ref("kids/" + kidData.name)
             .set(kidData)
-            .then(() => {
+            .then(async () => {
+              const adminPromise = database
+                .ref("users/" + user.uid + "/adminOf")
+                .push(kidData.name);
+              const subscriptionPromise = database
+                .ref("users/" + user.uid + "/adoptions")
+                .push(kidData.name);
+
+              await Promise.all([adminPromise, subscriptionPromise]);
+
               setLoading(false);
               callback();
             });
