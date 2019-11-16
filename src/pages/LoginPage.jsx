@@ -2,7 +2,7 @@ import React from "react";
 import { AuthPage } from "components/shared/AuthPage";
 import { Typography, Grid, TextField, Button } from "@material-ui/core";
 import { Redirect } from "react-router-dom";
-import * as ROUTES from "constants/routes";
+import { ROUTES } from "constants/routes";
 import { updateStateObjectByKey } from "utilities/StateHelpers";
 import { useAuth } from "api/firebase";
 

@@ -9,7 +9,7 @@ import { Nav } from "components/shared/navigation/Nav";
 import AuthInstance, { AuthContext } from "api/firebase";
 
 import { PAGES } from "constants/Pages";
-import * as ROUTES from "constants/routes";
+import { ROUTES } from "constants/routes";
 
 export function Daddit(props) {
   const myTheme = constructMuiTheme(themes[DEFAULT_THEME]);
