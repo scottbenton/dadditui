@@ -1,8 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, TextField, Grid } from "@material-ui/core";
 import { updateStateObjectByKey } from "utilities/StateHelpers";
 import { useDatabase } from "api/firebase/FirebaseDatabase";
+
+import { LoadingButton } from "components/shared/LoadingButton";
+import { useCurrentUser } from "api/firebase/FirebaseUser";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -18,24 +21,32 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export function CreateKid(props) {
-  const { handleCancel } = props;
+  const { callback } = props;
 
   const { database } = useDatabase();
-
-  console.log(database);
+  const { user } = useCurrentUser();
 
   const classes = useStyles();
   const [kidData, setKidData] = React.useState({});
   const updateKidDataByKey = (key, value) =>
     updateStateObjectByKey(key, value, setKidData);
+  const [loading, setLoading] = React.useState(false);
 
   const handleCreate = () => {
+    kidData.owners = [user.uid];
+    setLoading(true);
     database
       .ref("kids/" + kidData.name)
       .once("value")
       .then(snapshot => {
         if (!snapshot.exists()) {
-          database.ref("kids/" + kidData.name).set(kidData);
+          database
+            .ref("kids/" + kidData.name)
+            .set(kidData)
+            .then(() => {
+              setLoading(false);
+              callback();
+            });
         }
       });
   };
@@ -66,19 +77,21 @@ export function CreateKid(props) {
         <Grid item xs={12} className={classes.buttonHolder}>
           <Button
             className={classes.button}
+            color="primary"
             variant="outlined"
-            onClick={() => handleCancel()}
+            onClick={callback}
           >
             Cancel
           </Button>
-          <Button
+          <LoadingButton
             className={classes.button}
             color="primary"
             variant="contained"
             onClick={() => handleCreate()}
+            loading={loading}
           >
             Create Kid
-          </Button>
+          </LoadingButton>
         </Grid>
       </Grid>
     </div>
