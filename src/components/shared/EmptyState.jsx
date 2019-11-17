@@ -7,7 +7,8 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 400,
     margin: theme.spacing(2),
     marginLeft: "auto",
-    marginRight: "auto"
+    marginRight: "auto",
+    width: "98%"
   }
 }));
 
