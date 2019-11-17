@@ -23,7 +23,9 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.primary.light,
     color: theme.palette.primary.contrastText,
     padding: theme.spacing(3),
-    paddingLeft: theme.spacing(5)
+    paddingLeft: theme.spacing(5),
+    boxShadow:
+      "0px 2px 4px -1px rgba(0,0,0,0.2), 0px 4px 5px 0px rgba(0,0,0,0.14), 0px 1px 10px 0px rgba(0,0,0,0.12)"
   },
   title: {
     marginLeft: theme.spacing(2)
@@ -74,21 +76,28 @@ export function KidsPage(props) {
   useEffect(() => {
     const snapshotFunction = async commentPromises => {
       const commentSnapshots = await Promise.all(commentPromises);
-      const commentData = commentSnapshots.map(commentSnapshot => commentSnapshot.val());
+      const commentData = commentSnapshots.map(commentSnapshot =>
+        commentSnapshot.val()
+      );
       const commentAuthorPromises = commentData.map(comment => {
         return getUserNameFromID(comment.author, database);
       });
       const commentAuthors = await Promise.all(commentAuthorPromises);
-      const commentDataWithAuthors = commentData.map((comment, commentIndex) => {
-        return {...comment, authorDisplayName:commentAuthors[commentIndex]};
-      });
+      const commentDataWithAuthors = commentData.map(
+        (comment, commentIndex) => {
+          return {
+            ...comment,
+            authorDisplayName: commentAuthors[commentIndex]
+          };
+        }
+      );
       setComments(commentDataWithAuthors);
-    }
+    };
     if (kidDetails) {
       if (kidDetails.comments) {
         let commentArray = Object.values(kidDetails.comments);
-        let commentPromises = commentArray.map(({key}) => {
-          return database.ref("comments/" + key).once("value", data => data)
+        let commentPromises = commentArray.map(({ key }) => {
+          return database.ref("comments/" + key).once("value", data => data);
         });
         snapshotFunction(commentPromises);
       } else {
@@ -97,8 +106,11 @@ export function KidsPage(props) {
     }
   }, [database, kidDetails]);
 
-  const addCommentToKid = async (commentID) => 
-    database.ref("kids/" + kidDetails.name + "/comments").push().set({ key : commentID });
+  const addCommentToKid = async commentID =>
+    database
+      .ref("kids/" + kidDetails.name + "/comments")
+      .push()
+      .set({ key: commentID });
 
   return (
     <>
@@ -131,35 +143,38 @@ export function KidsPage(props) {
                   className={classes.button}
                 >
                   <DialogWrapper title="New Discussion">
-                    <CreateComment addCommentToParent={ addCommentToKid }/>
+                    <CreateComment addCommentToParent={addCommentToKid} />
                   </DialogWrapper>
                 </OpenButton>
               }
             />
           ) : (
             <>
-            <List>
-            {comments.map((comment, commentIndex) => (
-                    <ListItem
-                      button
-                      key={commentIndex}
-                      // onClick={() => handleKidOpen(kid.name)}
-                    >
-                      <ListItemText primary={comment.text} secondary={comment.authorDisplayName} />
-                    </ListItem>
-            ))}
-            </List>
-             <OpenButton
-             buttonContent={<AddIcon/>}
-             fab
-             color="primary"
-             className={classes.fab}
-           >
-             <DialogWrapper title="New Discussion">
-               <CreateComment addCommentToParent={ addCommentToKid }/>
-             </DialogWrapper>
-           </OpenButton>
-           </>
+              <List>
+                {comments.map((comment, commentIndex) => (
+                  <ListItem
+                    button
+                    key={commentIndex}
+                    // onClick={() => handleKidOpen(kid.name)}
+                  >
+                    <ListItemText
+                      primary={comment.text}
+                      secondary={comment.authorDisplayName}
+                    />
+                  </ListItem>
+                ))}
+              </List>
+              <OpenButton
+                buttonContent={<AddIcon />}
+                fab
+                color="primary"
+                className={classes.fab}
+              >
+                <DialogWrapper title="New Discussion">
+                  <CreateComment addCommentToParent={addCommentToKid} />
+                </DialogWrapper>
+              </OpenButton>
+            </>
           )}
         </FullPage>
       )}
