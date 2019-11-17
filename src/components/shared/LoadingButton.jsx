@@ -4,6 +4,9 @@ import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles(theme => ({
+  buttonHolder: {
+    position: "relative"
+  },
   buttonProgress: {
     color: theme.palette.primary.main,
     position: "absolute",
@@ -19,13 +22,13 @@ export function LoadingButton(props) {
   const classes = useStyles();
 
   return (
-    <>
+    <div className={classes.buttonHolder}>
       <Button disabled={disabled || loading} {...otherProps}>
         {children}
       </Button>
       {loading && (
         <CircularProgress size={24} className={classes.buttonProgress} />
       )}
-    </>
+    </div>
   );
 }

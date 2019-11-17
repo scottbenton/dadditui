@@ -9,7 +9,9 @@ import { FullPage } from "components/shared/FullPage";
 import { EmptyState } from "components/shared/EmptyState";
 
 import NoCommentImage from "resources/images/conversation.svg";
-import Button from "@material-ui/core/Button";
+import { OpenButton } from "components/shared/OpenButton";
+import { DialogWrapper } from "components/shared/DialogWrapper";
+import { CreateComment } from "components/daddit/comments/CreateComment";
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -89,16 +91,19 @@ export function KidsPage(props) {
         <FullPage>
           {comments.length === 0 ? (
             <EmptyState
-              title="No Comments Yet"
+              title="No Discussions Yet"
               image={NoCommentImage}
               actions={
-                <Button
-                  className={classes.button}
+                <OpenButton
+                  buttonContent="Start a Discussion"
                   variant="contained"
                   color="primary"
+                  className={classes.button}
                 >
-                  Add a Comment
-                </Button>
+                  <DialogWrapper title="New Discussion">
+                    <CreateComment />
+                  </DialogWrapper>
+                </OpenButton>
               }
             />
           ) : (
