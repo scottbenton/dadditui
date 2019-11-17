@@ -19,7 +19,7 @@ export function SubscriptionsPage(props) {
       if (data) {
         const keyArray = Object.values(data);
         let subPromises = keyArray.map(key => {
-          return database.ref("kids/" + key).once("value", data => data.val());
+          return database.ref("kids/" + key).once("value", data => data);
         });
         const subSnapshots = await Promise.all(subPromises);
         const subData = subSnapshots.map(subSnapshot => subSnapshot.val());

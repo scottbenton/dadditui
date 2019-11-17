@@ -7,11 +7,15 @@ import { useQuery } from "utilities/routeHelpers";
 import { useDatabase } from "api/firebase/FirebaseDatabase";
 import { FullPage } from "components/shared/FullPage";
 import { EmptyState } from "components/shared/EmptyState";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
 
 import NoCommentImage from "resources/images/conversation.svg";
 import { OpenButton } from "components/shared/OpenButton";
 import { DialogWrapper } from "components/shared/DialogWrapper";
 import { CreateComment } from "components/daddit/comments/CreateComment";
+import AddIcon from "@material-ui/icons/Add";
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -25,6 +29,11 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     margin: theme.spacing(2)
+  },
+  fab: {
+    position: "absolute",
+    bottom: theme.spacing(1),
+    right: theme.spacing(1)
   }
 }));
 
@@ -62,13 +71,26 @@ export function KidsPage(props) {
   }, [database, kidName]);
 
   useEffect(() => {
+    const snapshotFunction = async commentPromises => {
+      const commentSnapshots = await Promise.all(commentPromises);
+      const commentData = commentSnapshots.map(commentSnapshot => commentSnapshot.val());
+      setComments(commentData);
+    }
     if (kidDetails) {
       if (kidDetails.comments) {
+        let commentArray = Object.values(kidDetails.comments);
+        let commentPromises = commentArray.map(({key}) => {
+          return database.ref("comments/" + key).once("value", data => data)
+        });
+        snapshotFunction(commentPromises);
       } else {
         setComments([]);
       }
     }
   }, [database, kidDetails]);
+
+  const addCommentToKid = async (commentID) => 
+    database.ref("kids/" + kidDetails.name + "/comments").push().set({ key : commentID });
 
   return (
     <>
@@ -101,13 +123,35 @@ export function KidsPage(props) {
                   className={classes.button}
                 >
                   <DialogWrapper title="New Discussion">
-                    <CreateComment />
+                    <CreateComment addCommentToParent={ addCommentToKid }/>
                   </DialogWrapper>
                 </OpenButton>
               }
             />
           ) : (
-            <Typography>Comments Exist</Typography>
+            <>
+            <List>
+            {comments.map((comment, commentIndex) => (
+                    <ListItem
+                      button
+                      key={commentIndex}
+                      // onClick={() => handleKidOpen(kid.name)}
+                    >
+                      <ListItemText primary={comment.text} secondary={comment.author} />
+                    </ListItem>
+            ))}
+            </List>
+             <OpenButton
+             buttonContent={<AddIcon/>}
+             fab
+             color="primary"
+             className={classes.fab}
+           >
+             <DialogWrapper title="New Discussion">
+               <CreateComment addCommentToParent={ addCommentToKid }/>
+             </DialogWrapper>
+           </OpenButton>
+           </>
           )}
         </FullPage>
       )}
