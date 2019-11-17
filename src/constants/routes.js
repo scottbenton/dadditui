@@ -3,5 +3,6 @@ export const ROUTES = {
   SIGN_UP: "/signup",
   LOGIN: "/login",
   BROWSE: "/browse",
-  SUBSCRIPTIONS: "/subscriptions"
+  SUBSCRIPTIONS: "/subscriptions",
+  KIDS: "/kid"
 };

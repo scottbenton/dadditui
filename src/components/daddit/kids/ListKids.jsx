@@ -6,6 +6,10 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
 
+import { useHistory } from "react-router-dom";
+import { ROUTES } from "constants/routes";
+import { makeQueryParams } from "utilities/routeHelpers";
+
 const useStyles = makeStyles(theme => ({
   root: {
     marginTop: theme.spacing(2),
@@ -22,13 +26,31 @@ export function ListKids(props) {
 
   const classes = useStyles();
 
+  let history = useHistory();
+
+  const handleKidOpen = name => {
+    history.push(
+      ROUTES.KIDS +
+        makeQueryParams([
+          {
+            key: "kid",
+            value: name
+          }
+        ])
+    );
+  };
+
   return (
     <>
       {Array.isArray(kids) && (
         <Paper className={classes.root}>
           <List>
             {kids.map(kid => (
-              <ListItem button key={kid.name}>
+              <ListItem
+                button
+                key={kid.name}
+                onClick={() => handleKidOpen(kid.name)}
+              >
                 <ListItemText primary={kid.name} secondary={kid.description} />
               </ListItem>
             ))}

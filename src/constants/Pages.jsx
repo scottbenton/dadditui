@@ -18,6 +18,9 @@ import BrowseIcon from "@material-ui/icons/Pageview";
 import { SubscriptionsPage } from "pages/SubscriptionsPage";
 import SubscriptionsIcon from "@material-ui/icons/RssFeed";
 
+import { KidsPage } from "pages/KidsPage";
+import KidsIcon from "@material-ui/icons/ChildCare";
+
 export const PAGES = {
   LOGIN: {
     title: "Login",
@@ -68,5 +71,15 @@ export const PAGES = {
     )),
     component: props => <SubscriptionsPage {...props} />,
     path: ROUTES.SUBSCRIPTIONS
+  },
+  KIDS: {
+    title: "Kids",
+    icon: <KidsIcon />,
+    navBar: false,
+    link: React.forwardRef((props, ref) => (
+      <Link to={ROUTES.KIDS} innerRef={ref} {...props} />
+    )),
+    component: props => <KidsPage {...props} />,
+    path: ROUTES.KIDS
   }
 };

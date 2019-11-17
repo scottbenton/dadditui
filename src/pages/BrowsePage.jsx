@@ -17,7 +17,6 @@ export function BrowsePage(props) {
     const snapshotFunction = async snapshot => {
       const data = snapshot.val();
       if (data) {
-        console.log(data);
         setKids(Object.values(data));
       }
     };
