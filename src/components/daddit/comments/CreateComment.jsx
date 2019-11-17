@@ -21,7 +21,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export function CreateComment(props) {
-  const { callback } = props;
+  const { callback , addCommentToParent } = props;
 
   const { database } = useDatabase();
   const { user } = useCurrentUser();
@@ -43,6 +43,14 @@ export function CreateComment(props) {
 
   const handleCreate = () => {
     setLoading(true);
+    const commentID = database.ref("comments").push().getKey();
+    database.ref("comments/" + commentID)
+    .set(commentData)
+    .then(async () => {
+        await addCommentToParent(commentID);
+        setLoading(false);
+        callback();
+    });
   };
 
   return (
