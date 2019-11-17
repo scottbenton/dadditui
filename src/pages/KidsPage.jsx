@@ -10,6 +10,10 @@ import { EmptyState } from "components/shared/EmptyState";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemText from "@material-ui/core/ListItemText";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardActionArea from "@material-ui/core/CardActionArea";
 
 import NoCommentImage from "resources/images/conversation.svg";
 import { OpenButton } from "components/shared/OpenButton";
@@ -35,6 +39,13 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     bottom: theme.spacing(1),
     right: theme.spacing(1)
+  },
+  card: {
+    margin: theme.spacing(2),
+    marginLeft: "auto",
+    marginRight: "auto",
+    maxWidth: 1000,
+    whiteSpace: "pre-wrap"
   }
 }));
 
@@ -100,6 +111,8 @@ export function KidsPage(props) {
   const addCommentToKid = async (commentID) => 
     database.ref("kids/" + kidDetails.name + "/comments").push().set({ key : commentID });
 
+  const handleCommentOpen = (comment) => {}; //TODO: FILL IN
+
   return (
     <>
       {kidDetails && (
@@ -118,8 +131,9 @@ export function KidsPage(props) {
         </div>
       )}
       {Array.isArray(comments) && (
-        <FullPage>
+        <>
           {comments.length === 0 ? (
+            <FullPage>
             <EmptyState
               title="No Discussions Yet"
               image={NoCommentImage}
@@ -136,19 +150,23 @@ export function KidsPage(props) {
                 </OpenButton>
               }
             />
+            </FullPage>
           ) : (
             <>
-            <List>
             {comments.map((comment, commentIndex) => (
-                    <ListItem
-                      button
-                      key={commentIndex}
-                      // onClick={() => handleKidOpen(kid.name)}
-                    >
-                      <ListItemText primary={comment.text} secondary={comment.authorDisplayName} />
-                    </ListItem>
+              <Card key={commentIndex} className={classes.card}>
+                <CardActionArea onClick={() => handleCommentOpen(comment)}>
+                  <CardContent>
+                    <Typography variant="h6">
+                      {comment.text}
+                    </Typography>
+                    <Typography textColor="textSecondary">
+                      {comment.authorDisplayName}
+                    </Typography>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
             ))}
-            </List>
              <OpenButton
              buttonContent={<AddIcon/>}
              fab
@@ -161,7 +179,7 @@ export function KidsPage(props) {
            </OpenButton>
            </>
           )}
-        </FullPage>
+        </>
       )}
     </>
   );
