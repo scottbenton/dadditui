@@ -9,6 +9,7 @@ import { updateStateObjectByKey } from "utilities/StateHelpers";
 import { validateEmail } from "utilities/stringHelpers";
 import { useAuth } from "api/firebase";
 import { useCurrentUser } from "api/firebase/FirebaseUser";
+import { useDatabase } from "api/firebase/FirebaseDatabase";
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -18,7 +19,8 @@ const useStyles = makeStyles(theme => ({
 
 export function SignUpPage(props) {
   const auth = useAuth();
-  const { updateUser } = useCurrentUser();
+  const { user, updateUser } = useCurrentUser();
+  const { database } = useDatabase();
   const classes = useStyles();
 
   const [signUpInfo, setSignUpInfo] = React.useState({});
@@ -38,8 +40,14 @@ export function SignUpPage(props) {
       password === reenterPassword &&
       displayName
     ) {
-      await auth.doCreateUserWithEmailAndPassword(email, password);
-      await auth.doUpdateProfile(otherInfo);
+      const userRef = await auth.doCreateUserWithEmailAndPassword(
+        email,
+        password
+      );
+      console.log(userRef);
+      const userId = userRef.user.uid;
+      console.log(userId);
+      await database.ref("users/" + userId).update(otherInfo);
       updateUser();
       setSignedIn(true);
     } else {
