@@ -16,6 +16,7 @@ import { OpenButton } from "components/shared/OpenButton";
 import { DialogWrapper } from "components/shared/DialogWrapper";
 import { CreateComment } from "components/daddit/comments/CreateComment";
 import AddIcon from "@material-ui/icons/Add";
+import { getUserNameFromID } from "utilities/databaseHelper";
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -74,7 +75,14 @@ export function KidsPage(props) {
     const snapshotFunction = async commentPromises => {
       const commentSnapshots = await Promise.all(commentPromises);
       const commentData = commentSnapshots.map(commentSnapshot => commentSnapshot.val());
-      setComments(commentData);
+      const commentAuthorPromises = commentData.map(comment => {
+        return getUserNameFromID(comment.author, database);
+      });
+      const commentAuthors = await Promise.all(commentAuthorPromises);
+      const commentDataWithAuthors = commentData.map((comment, commentIndex) => {
+        return {...comment, authorDisplayName:commentAuthors[commentIndex]};
+      });
+      setComments(commentDataWithAuthors);
     }
     if (kidDetails) {
       if (kidDetails.comments) {
@@ -137,7 +145,7 @@ export function KidsPage(props) {
                       key={commentIndex}
                       // onClick={() => handleKidOpen(kid.name)}
                     >
-                      <ListItemText primary={comment.text} secondary={comment.author} />
+                      <ListItemText primary={comment.text} secondary={comment.authorDisplayName} />
                     </ListItem>
             ))}
             </List>
