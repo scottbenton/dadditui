@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { FullPage } from "components/shared/FullPage";
 import { useDatabase } from "api/firebase/FirebaseDatabase";
 import { useCurrentUser } from "api/firebase/FirebaseUser";
 

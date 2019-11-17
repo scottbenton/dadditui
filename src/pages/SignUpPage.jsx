@@ -19,7 +19,7 @@ const useStyles = makeStyles(theme => ({
 
 export function SignUpPage(props) {
   const auth = useAuth();
-  const { user, updateUser } = useCurrentUser();
+  const { updateUser } = useCurrentUser();
   const { database } = useDatabase();
   const classes = useStyles();
 
