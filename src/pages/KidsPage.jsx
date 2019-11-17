@@ -6,9 +6,10 @@ import { useQuery } from "utilities/routeHelpers";
 import { useDatabase } from "api/firebase/FirebaseDatabase";
 import { FullPage } from "components/shared/FullPage";
 import { EmptyState } from "components/shared/EmptyState";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+import Card from "@material-ui/core/Card";
+import CardActions from "@material-ui/core/CardActions";
+import CardContent from "@material-ui/core/CardContent";
+import CardActionArea from "@material-ui/core/CardActionArea";
 
 import NoCommentImage from "resources/images/conversation.svg";
 import { OpenButton } from "components/shared/OpenButton";
@@ -36,6 +37,13 @@ const useStyles = makeStyles(theme => ({
     position: "absolute",
     bottom: theme.spacing(1),
     right: theme.spacing(1)
+  },
+  card: {
+    margin: theme.spacing(2),
+    marginLeft: "auto",
+    marginRight: "auto",
+    maxWidth: 1000,
+    whiteSpace: "pre-wrap"
   }
 }));
 
@@ -111,6 +119,8 @@ export function KidsPage(props) {
       .push()
       .set({ key: commentID });
 
+  const handleCommentOpen = comment => {}; //TODO: FILL IN
+
   return (
     <>
       {kidDetails && (
@@ -129,40 +139,40 @@ export function KidsPage(props) {
         </div>
       )}
       {Array.isArray(comments) && (
-        <FullPage>
+        <>
           {comments.length === 0 ? (
-            <EmptyState
-              title="No Discussions Yet"
-              image={NoCommentImage}
-              actions={
-                <OpenButton
-                  buttonContent="Start a Discussion"
-                  variant="contained"
-                  color="primary"
-                  className={classes.button}
-                >
-                  <DialogWrapper title="New Discussion">
-                    <CreateComment addCommentToParent={addCommentToKid} />
-                  </DialogWrapper>
-                </OpenButton>
-              }
-            />
+            <FullPage>
+              <EmptyState
+                title="No Discussions Yet"
+                image={NoCommentImage}
+                actions={
+                  <OpenButton
+                    buttonContent="Start a Discussion"
+                    variant="contained"
+                    color="primary"
+                    className={classes.button}
+                  >
+                    <DialogWrapper title="New Discussion">
+                      <CreateComment addCommentToParent={addCommentToKid} />
+                    </DialogWrapper>
+                  </OpenButton>
+                }
+              />
+            </FullPage>
           ) : (
             <>
-              <List>
-                {comments.map((comment, commentIndex) => (
-                  <ListItem
-                    button
-                    key={commentIndex}
-                    // onClick={() => handleKidOpen(kid.name)}
-                  >
-                    <ListItemText
-                      primary={comment.text}
-                      secondary={comment.authorDisplayName}
-                    />
-                  </ListItem>
-                ))}
-              </List>
+              {comments.map((comment, commentIndex) => (
+                <Card key={commentIndex} className={classes.card}>
+                  <CardActionArea onClick={() => handleCommentOpen(comment)}>
+                    <CardContent>
+                      <Typography variant="h6">{comment.text}</Typography>
+                      <Typography color="textSecondary">
+                        {comment.authorDisplayName}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              ))}
               <OpenButton
                 buttonContent={<AddIcon />}
                 fab
@@ -175,7 +185,7 @@ export function KidsPage(props) {
               </OpenButton>
             </>
           )}
-        </FullPage>
+        </>
       )}
     </>
   );
