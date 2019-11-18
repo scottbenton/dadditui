@@ -3,10 +3,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import { useDatabase } from "api/firebase/FirebaseDatabase";
 import { Typography } from "@material-ui/core";
 import  { getUserNameFromID } from "utilities/databaseHelper";
+import { CommentSection } from "./CommentSection";
 
 const useStyles = makeStyles(theme => ({}));
 
-export function ViewComment(props) {
+export function ViewComments(props) {
   const { parentComment, callback } = props;
   const { database } = useDatabase();
 
@@ -55,5 +56,5 @@ export function ViewComment(props) {
     console.log(comments);
   }, [comments]);
 
-  return <>{comments && <Typography>Comments Loaded</Typography>}</>;
+  return <>{comments && <CommentSection comment={comments} commentDepth={0}/>}</>;
 }

@@ -17,7 +17,7 @@ import { DialogWrapper } from "components/shared/DialogWrapper";
 import { CreateComment } from "components/daddit/comments/CreateComment";
 import AddIcon from "@material-ui/icons/Add";
 import { getUserNameFromID } from "utilities/databaseHelper";
-import { ViewComment } from "components/daddit/comments/ViewComment";
+import { ViewComments } from "components/daddit/comments/ViewComments";
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -133,7 +133,7 @@ export function KidsPage(props) {
         open={Boolean(openComment)}
         setOpen={setOpenComment}
       >
-        <ViewComment parentComment={openComment} />
+        <ViewComments parentComment={openComment} />
       </DialogWrapper>
       {kidDetails && (
         <div className={classes.header}>
