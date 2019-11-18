@@ -35,7 +35,9 @@ export function ViewComments(props) {
             return loadComments(reply);
           });
           const fulfilledReplies = await Promise.all(replyPromises);
-          newComment.replies = fulfilledReplies;
+          newComment.replies = fulfilledReplies.map((reply, replyIndex) => {
+            return {...reply, id:replies[replyIndex]}
+          });
           newComment.authorDisplayName = await authorPromise;
           resolve(newComment);
         } else {
