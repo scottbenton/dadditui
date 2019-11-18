@@ -5,10 +5,8 @@ import { CommentSection } from "./CommentSection";
 import { updateStateObjectByKey } from "utilities/StateHelpers";
 
 export function ViewComments(props) {
-  const { parentComment } = props;
+  const { parentComment, id } = props;
   const { database } = useDatabase();
-
-  const { id } = parentComment;
 
   const [comments, setComments] = React.useState();
   const updateCommentByID = (id, comment) =>
