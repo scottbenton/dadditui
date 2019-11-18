@@ -17,6 +17,7 @@ import { DialogWrapper } from "components/shared/DialogWrapper";
 import { CreateComment } from "components/daddit/comments/CreateComment";
 import AddIcon from "@material-ui/icons/Add";
 import { getUserNameFromID } from "utilities/databaseHelper";
+import { ViewComment } from "components/daddit/comments/ViewComment";
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -52,6 +53,8 @@ export function KidsPage(props) {
 
   const [kidDetails, setKidDetails] = React.useState();
   const [comments, setComments] = React.useState();
+
+  const [openComment, setOpenComment] = React.useState();
 
   const { database } = useDatabase();
 
@@ -119,10 +122,19 @@ export function KidsPage(props) {
       .push()
       .set({ key: commentID });
 
-  const handleCommentOpen = comment => {}; //TODO: FILL IN
+  const handleCommentOpen = comment => {
+    setOpenComment(comment);
+  }; //TODO: FILL IN
 
   return (
     <>
+      <DialogWrapper
+        title="Comment"
+        open={Boolean(openComment)}
+        setOpen={setOpenComment}
+      >
+        <ViewComment parentComment={openComment} />
+      </DialogWrapper>
       {kidDetails && (
         <div className={classes.header}>
           <Typography
