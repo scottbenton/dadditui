@@ -31,14 +31,14 @@ export function SignUpPage(props) {
 
   const handleSubmit = async () => {
     const { email, password, reenterPassword, ...otherInfo } = signUpInfo;
-    const { displayName } = signUpInfo;
+    const { username } = signUpInfo;
     setShowError(true);
     console.log(signUpInfo);
     if (
       validateEmail(email) &&
       password &&
       password === reenterPassword &&
-      displayName
+      username
     ) {
       const userRef = await auth.doCreateUserWithEmailAndPassword(
         email,
@@ -48,7 +48,6 @@ export function SignUpPage(props) {
       const userId = userRef.user.uid;
       console.log(userId);
       await database.ref("users/" + userId).update(otherInfo);
-      updateUser();
       setSignedIn(true);
     } else {
       console.log("Validation did not pass");
@@ -68,10 +67,10 @@ export function SignUpPage(props) {
         <Grid item xs={12}>
           <TextField
             required
-            id="Full Name"
-            label="Full Name"
-            value={signUpInfo.displayName || ""}
-            onChange={evt => updateSignUpInfo("displayName", evt.target.value)}
+            id="username"
+            label="Username"
+            value={signUpInfo.username || ""}
+            onChange={evt => updateSignUpInfo("username", evt.target.value)}
             variant="outlined"
             fullWidth
           />

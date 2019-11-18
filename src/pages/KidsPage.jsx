@@ -67,7 +67,6 @@ export function KidsPage(props) {
     const snapshotFunction = async snapshot => {
       const data = snapshot.val();
       if (data) {
-        console.log(data);
         setKidDetails(data);
       }
     };
@@ -92,7 +91,6 @@ export function KidsPage(props) {
       const commentAuthorPromises = commentData.map(comment => {
         return getUserNameFromID(comment.author, database);
       });
-      console.log(commentArray);
       const commentAuthors = await Promise.all(commentAuthorPromises);
       const commentDataWithAuthors = commentData.map(
         (comment, commentIndex) => {
