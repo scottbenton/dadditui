@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDatabase } from "api/firebase/FirebaseDatabase";
 import Typography from "@material-ui/core/Typography";
-import { getUserNameFromID } from "utilities/databaseHelper";
 import { OpenButton } from "components/shared/OpenButton";
 import { DialogWrapper } from "components/shared/DialogWrapper";
 import { CreateComment } from "components/daddit/comments/CreateComment";
@@ -21,7 +20,6 @@ const useStyles = makeStyles(theme => ({
 export function CommentSection(props) {
   const { comments, commentID, commentDepth } = props;
 
-  console.log(comments);
   const currentComment = comments[commentID];
 
   const classes = useStyles({ commentDepth });
@@ -30,7 +28,6 @@ export function CommentSection(props) {
   const addReply = async newCommentID => {
     const ref = await database.ref("comments/" + commentID + "/replyKeys");
     const newKey = ref.push().getKey();
-    console.log(newKey, newCommentID);
     ref.update({ ["/" + newKey]: newCommentID });
   };
   return (
