@@ -21,7 +21,11 @@ export function SubscriptionsPage(props) {
           return database.ref("kids/" + key).once("value", data => data);
         });
         const subSnapshots = await Promise.all(subPromises);
-        const subData = subSnapshots.map(subSnapshot => subSnapshot.val());
+
+        const subData = {};
+        subSnapshots.forEach(
+          (subSnapshot, index) => (subData[keyArray[index]] = subSnapshot.val())
+        );
         setSubscriptions(subData);
       }
     };

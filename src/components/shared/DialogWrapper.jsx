@@ -4,7 +4,6 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import Grid from "@material-ui/core/Grid";
 
 const useStyles = makeStyles(theme => ({
   header: {
