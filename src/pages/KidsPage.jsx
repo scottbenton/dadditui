@@ -35,7 +35,7 @@ const useStyles = makeStyles(theme => ({
     margin: theme.spacing(2)
   },
   fab: {
-    position: "absolute",
+    position: "fixed",
     bottom: theme.spacing(1),
     right: theme.spacing(1)
   },
@@ -84,7 +84,7 @@ export function KidsPage(props) {
   }, [database, kidName]);
 
   useEffect(() => {
-    const snapshotFunction = async commentPromises => {
+    const snapshotFunction = async (commentPromises, commentArray) => {
       const commentSnapshots = await Promise.all(commentPromises);
       const commentData = commentSnapshots.map(commentSnapshot =>
         commentSnapshot.val()
@@ -92,12 +92,14 @@ export function KidsPage(props) {
       const commentAuthorPromises = commentData.map(comment => {
         return getUserNameFromID(comment.author, database);
       });
+      console.log(commentArray);
       const commentAuthors = await Promise.all(commentAuthorPromises);
       const commentDataWithAuthors = commentData.map(
         (comment, commentIndex) => {
           return {
             ...comment,
-            authorDisplayName: commentAuthors[commentIndex]
+            authorDisplayName: commentAuthors[commentIndex],
+            id: commentArray[commentIndex].key
           };
         }
       );
@@ -109,7 +111,7 @@ export function KidsPage(props) {
         let commentPromises = commentArray.map(({ key }) => {
           return database.ref("comments/" + key).once("value", data => data);
         });
-        snapshotFunction(commentPromises);
+        snapshotFunction(commentPromises, commentArray);
       } else {
         setComments([]);
       }
