@@ -19,7 +19,7 @@ export function UserAvatar(props) {
 
   const classes = useStyles({ color: color });
 
-  const avatarText = user.displayName ? user.displayName.slice(0, 1) : "";
+  const avatarText = user.username ? user.username.slice(0, 1) : "";
 
   return (
     <>{user && <Avatar className={classes.avatar}>{avatarText}</Avatar>}</>

@@ -10,6 +10,7 @@ import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import CardActionArea from "@material-ui/core/CardActionArea";
+import { updateStateObjectByKey } from "utilities/StateHelpers";
 
 import NoCommentImage from "resources/images/conversation.svg";
 import { OpenButton } from "components/shared/OpenButton";
@@ -18,6 +19,7 @@ import { CreateComment } from "components/daddit/comments/CreateComment";
 import AddIcon from "@material-ui/icons/Add";
 import { getUserNameFromID } from "utilities/databaseHelper";
 import { ViewComments } from "components/daddit/comments/ViewComments";
+import { UpvoteDownvote } from "components/daddit/comments/UpvoteDownvote";
 
 const useStyles = makeStyles(theme => ({
   header: {
@@ -45,6 +47,9 @@ const useStyles = makeStyles(theme => ({
     marginRight: "auto",
     maxWidth: 1000,
     whiteSpace: "pre-wrap"
+  },
+  content: {
+    display: "flex"
   }
 }));
 
@@ -52,9 +57,11 @@ export function KidsPage(props) {
   const classes = useStyles();
 
   const [kidDetails, setKidDetails] = React.useState();
-  const [comments, setComments] = React.useState();
+  const [comments, setComments] = React.useState({});
 
   const [openComment, setOpenComment] = React.useState();
+  const updateCommentByID = (id, comment) =>
+    updateStateObjectByKey(id, comment, setComments);
 
   const { database } = useDatabase();
 
@@ -67,7 +74,6 @@ export function KidsPage(props) {
     const snapshotFunction = async snapshot => {
       const data = snapshot.val();
       if (data) {
-        console.log(data);
         setKidDetails(data);
       }
     };
@@ -84,38 +90,33 @@ export function KidsPage(props) {
   }, [database, kidName]);
 
   useEffect(() => {
-    const snapshotFunction = async (commentPromises, commentArray) => {
-      const commentSnapshots = await Promise.all(commentPromises);
-      const commentData = commentSnapshots.map(commentSnapshot =>
-        commentSnapshot.val()
-      );
-      const commentAuthorPromises = commentData.map(comment => {
-        return getUserNameFromID(comment.author, database);
-      });
-      console.log(commentArray);
-      const commentAuthors = await Promise.all(commentAuthorPromises);
-      const commentDataWithAuthors = commentData.map(
-        (comment, commentIndex) => {
-          return {
-            ...comment,
-            authorDisplayName: commentAuthors[commentIndex],
-            id: commentArray[commentIndex].key
-          };
-        }
-      );
-      setComments(commentDataWithAuthors);
+    const snapshotFunction = async snapshot => {
+      const commentID = snapshot.ref.key;
+
+      const commentNoAuthor = snapshot.val();
+
+      const authorPromise = getUserNameFromID(commentNoAuthor.author, database);
+
+      let comment = { ...commentNoAuthor };
+      comment.authorDisplayName = await authorPromise;
+      updateCommentByID(commentID, comment);
     };
-    if (kidDetails) {
-      if (kidDetails.comments) {
-        let commentArray = Object.values(kidDetails.comments);
-        let commentPromises = commentArray.map(({ key }) => {
-          return database.ref("comments/" + key).once("value", data => data);
-        });
-        snapshotFunction(commentPromises, commentArray);
-      } else {
-        setComments([]);
-      }
+
+    if (kidDetails && kidDetails.comments) {
+      const idArray = Object.values(kidDetails.comments);
+      idArray.forEach(id => {
+        database.ref("comments/" + id.key).on("value", snapshotFunction);
+      });
     }
+
+    return () => {
+      if (kidDetails && kidDetails.comments) {
+        const idArray = Object.values(kidDetails.comments);
+        idArray.forEach(id => {
+          database.ref("comments/" + id.key).off("value", snapshotFunction);
+        });
+      }
+    };
   }, [database, kidDetails]);
 
   const addCommentToKid = async commentID =>
@@ -126,7 +127,11 @@ export function KidsPage(props) {
 
   const handleCommentOpen = comment => {
     setOpenComment(comment);
-  }; //TODO: FILL IN
+  };
+
+  useEffect(() => {
+    console.log(comments);
+  }, [comments]);
 
   return (
     <>
@@ -152,9 +157,9 @@ export function KidsPage(props) {
           </Typography>
         </div>
       )}
-      {Array.isArray(comments) && (
+      {comments && (
         <>
-          {comments.length === 0 ? (
+          {Object.keys(comments).length === 0 ? (
             <FullPage>
               <EmptyState
                 title="No Discussions Yet"
@@ -175,16 +180,28 @@ export function KidsPage(props) {
             </FullPage>
           ) : (
             <>
-              {comments.map((comment, commentIndex) => (
+              {Object.keys(comments).map((commentID, commentIndex) => (
                 <Card key={commentIndex} className={classes.card}>
-                  <CardActionArea onClick={() => handleCommentOpen(comment)}>
-                    <CardContent>
-                      <Typography variant="h6">{comment.text}</Typography>
-                      <Typography color="textSecondary">
-                        {comment.authorDisplayName}
-                      </Typography>
-                    </CardContent>
-                  </CardActionArea>
+                  <CardContent>
+                    <div className={classes.content}>
+                      <UpvoteDownvote
+                        comment={comments[commentID]}
+                        commentID={commentID}
+                      />
+                      <CardActionArea
+                        onClick={() => handleCommentOpen(comments[commentID])}
+                      >
+                        <div>
+                          <Typography variant="h6">
+                            {comments[commentID].text}
+                          </Typography>
+                          <Typography color="textSecondary">
+                            {comments[commentID].authorDisplayName}
+                          </Typography>
+                        </div>
+                      </CardActionArea>
+                    </div>
+                  </CardContent>
                 </Card>
               ))}
               <OpenButton

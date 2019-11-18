@@ -43,7 +43,7 @@ export function LandingPage(props) {
       </Typography>
 
       <img src={LandingSplash} alt="" className={classes.splash} />
-      {user ? (
+      {user.uid ? (
         <>
           <Button
             variant="outlined"
