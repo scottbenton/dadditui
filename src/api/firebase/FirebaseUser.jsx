@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react";
+import React, { useEffect } from "react";
 import { useAuth } from "api/firebase/FirebaseContext";
 import { useDatabase } from "./FirebaseDatabase";
 

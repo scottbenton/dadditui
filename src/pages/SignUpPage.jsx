@@ -8,7 +8,6 @@ import { AuthPage } from "components/shared/AuthPage";
 import { updateStateObjectByKey } from "utilities/StateHelpers";
 import { validateEmail } from "utilities/stringHelpers";
 import { useAuth } from "api/firebase";
-import { useCurrentUser } from "api/firebase/FirebaseUser";
 import { useDatabase } from "api/firebase/FirebaseDatabase";
 
 const useStyles = makeStyles(theme => ({
@@ -19,7 +18,6 @@ const useStyles = makeStyles(theme => ({
 
 export function SignUpPage(props) {
   const auth = useAuth();
-  const { updateUser } = useCurrentUser();
   const { database } = useDatabase();
   const classes = useStyles();
 

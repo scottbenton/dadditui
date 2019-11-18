@@ -9,7 +9,7 @@ import { EmptyState } from "components/shared/EmptyState";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import CardActionArea from "@material-ui/core/CardActionArea";
+import Button from "@material-ui/core/Button";
 import { updateStateObjectByKey } from "utilities/StateHelpers";
 
 import NoCommentImage from "resources/images/conversation.svg";
@@ -129,10 +129,6 @@ export function KidsPage(props) {
     setOpenComment(commentID);
   };
 
-  useEffect(() => {
-    console.log(comments);
-  }, [comments]);
-
   return (
     <>
       <DialogWrapper
@@ -188,20 +184,21 @@ export function KidsPage(props) {
                         comment={comments[commentID]}
                         commentID={commentID}
                       />
-                      <CardActionArea
-                        onClick={() => handleCommentOpen(commentID)}
-                      >
-                        <div>
-                          <Typography variant="h6">
-                            {comments[commentID].text}
-                          </Typography>
-                          <Typography color="textSecondary">
-                            {comments[commentID].authorDisplayName}
-                          </Typography>
-                        </div>
-                      </CardActionArea>
+                      <div>
+                        <Typography variant="h6">
+                          {comments[commentID].text}
+                        </Typography>
+                        <Typography color="textSecondary">
+                          {comments[commentID].authorDisplayName}
+                        </Typography>
+                      </div>
                     </div>
                   </CardContent>
+                  <CardActions>
+                    <Button onClick={() => handleCommentOpen(commentID)}>
+                      View Discussion
+                    </Button>
+                  </CardActions>
                 </Card>
               ))}
               <OpenButton
