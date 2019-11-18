@@ -48,7 +48,7 @@ export function ListKids(props) {
               <CardActionArea onClick={() => handleKidOpen(kid.name)}>
                 <CardContent>
                   <Typography variant="h6">{kid.name}</Typography>
-                  <Typography textColor="textSecondary">
+                  <Typography color="textSecondary">
                     {kid.description}
                   </Typography>
                 </CardContent>

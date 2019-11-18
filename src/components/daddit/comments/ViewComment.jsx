@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { useDatabase } from "api/firebase/FirebaseDatabase";
 import { Typography } from "@material-ui/core";
+import  { getUserNameFromID } from "utilities/databaseHelper";
 
 const useStyles = makeStyles(theme => ({}));
 
@@ -12,7 +13,6 @@ export function ViewComment(props) {
   const [comments, setComments] = React.useState();
 
   useEffect(() => {
-    const comments = { parentComment };
     const snapshotHelper = async dataPromise => {
       const snapshot = await dataPromise;
       return snapshot.val();
@@ -20,6 +20,8 @@ export function ViewComment(props) {
 
     const loadComments = async currentComment => {
       return new Promise(async (resolve, reject) => {
+        let newComment = { ...currentComment };
+        const authorPromise = getUserNameFromID(newComment.author, database);
         let replies = [];
         if (typeof currentComment.replyKeys === "object") {
           replies = Object.values(currentComment.replyKeys);
@@ -32,11 +34,12 @@ export function ViewComment(props) {
             return loadComments(reply);
           });
           const fulfilledReplies = await Promise.all(replyPromises);
-          let newComment = { ...currentComment };
           newComment.replies = fulfilledReplies;
+          newComment.authorDisplayName = await authorPromise;
           resolve(newComment);
         } else {
-          resolve(currentComment);
+          newComment.authorDisplayName = await authorPromise;
+          resolve(newComment);
         }
       });
     };
