@@ -125,8 +125,8 @@ export function KidsPage(props) {
       .push()
       .set({ key: commentID });
 
-  const handleCommentOpen = comment => {
-    setOpenComment(comment);
+  const handleCommentOpen = commentID => {
+    setOpenComment(commentID);
   };
 
   useEffect(() => {
@@ -140,7 +140,7 @@ export function KidsPage(props) {
         open={Boolean(openComment)}
         setOpen={setOpenComment}
       >
-        <ViewComments parentComment={openComment} />
+        <ViewComments parentComment={comments[openComment]} id={openComment} />
       </DialogWrapper>
       {kidDetails && (
         <div className={classes.header}>
@@ -189,7 +189,7 @@ export function KidsPage(props) {
                         commentID={commentID}
                       />
                       <CardActionArea
-                        onClick={() => handleCommentOpen(comments[commentID])}
+                        onClick={() => handleCommentOpen(commentID)}
                       >
                         <div>
                           <Typography variant="h6">
