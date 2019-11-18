@@ -12,6 +12,11 @@ const useStyles = makeStyles(theme => ({
     marginLeft: 'auto',
     marginRight: 'auto',
     textAlign: 'center',
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    '-webkit-transform': 'translate(-50%, -50%)',
+    transform: 'translate(-50%, 50%)'
   },
 }))
 

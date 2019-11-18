@@ -3,11 +3,11 @@ import ReactDOM from 'react-dom';
 import 'index.css';
 import { Daddit } from 'Daddit';
 import * as serviceWorker from 'serviceWorker';
+
 // import { initAuth } from 'auth/initAuth';
 require('typeface-open-sans');
-require('typeface-comfortaa');
+require('typeface-ibm-plex-sans');
 
-// initAuth();
 ReactDOM.render(<Daddit />, document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change

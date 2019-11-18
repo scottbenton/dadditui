@@ -1,5 +1,6 @@
-import app from 'firebase/app';
-import 'firebase/auth';
+import app from "firebase/app";
+import "firebase/auth";
+import "firebase/database";
 
 const config = {
   apiKey: "AIzaSyCecX05DOBjhu0TRzE4JXvdn0bxIuPDuzc",
@@ -13,9 +14,11 @@ const config = {
 
 class Firebase {
   constructor() {
-    app.initializeApp(config);
-
-    this.auth = app.auth();
+    if (!app.apps.length) {
+      app.initializeApp(config);
+      this.auth = app.auth();
+      this.database = app.database();
+    }
   }
 
   // AUTHENTICATION API
@@ -25,26 +28,23 @@ class Firebase {
   doSignInWithEmailAndPassword = (email, password) =>
     this.auth.signInWithEmailAndPassword(email, password);
 
-  doSignOut = () =>
-    this.auth.signOut();
+  doSignOut = () => this.auth.signOut();
 
-  doPasswordReset = email =>
-    this.auth.sendPasswordResetEmail(email);
+  doPasswordReset = email => this.auth.sendPasswordResetEmail(email);
 
-  doPasswordUpdate = password =>
-    this.auth.currentUser.updatePassword(password);
+  doPasswordUpdate = password => this.auth.currentUser.updatePassword(password);
 
   doUpdateProfile = async profileInfo => {
     await this.auth.currentUser.updateProfile(profileInfo);
     await this.auth.currentUser.reload();
-  }
+  };
 
-  doGetCurrentUser = () =>
-    this.auth.currentUser;
+  doGetCurrentUser = () => this.auth.currentUser;
 
   doGetCurrentUserUID = () =>
     this.auth.currentUser ? this.auth.currentUser.uid : null;
 
+  doGetDatabase = () => this.database;
 }
 
 export default Firebase;

@@ -1,63 +1,94 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Grid from '@material-ui/core/Grid';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import Tooltip from "@material-ui/core/Tooltip";
+import Grid from "@material-ui/core/Grid";
 
-import { useCurrentUser } from 'api/auth';
+import { useCurrentUser } from "api/firebase";
 
-import { UserAvatar } from 'components/shared/UserAvatar';
+import { UserAvatar } from "components/shared/UserAvatar";
 
-import { PAGES } from 'constants/Pages';
+import { PAGES } from "constants/Pages";
+import { IconButton } from "@material-ui/core";
+import { useLocation } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   spaceEater: {
-    flexGrow: 1,
+    flexGrow: 1
   },
   buttonHolder: {
-    display: 'flex',
+    display: "flex"
   },
   title: {
-    textDecoration: 'none',
-    fontFamily: 'comfortaa',
+    textDecoration: "none",
+    fontFamily: "IBM Plex Sans"
   },
-  appbar: {
-    backgroundColor: theme.palette.primary.dark,
-    color: theme.palette.primary.contrastText,
+  iconHolder: {
+    display: "flex",
+    justifyContent: "center"
+  },
+  appBar: {
+    borderTop: "6px solid " + theme.palette.primary.main
   }
 }));
 
 export function NavBar(props) {
-  const user = useCurrentUser();
+  const { pathname } = useLocation();
+  const { user } = useCurrentUser();
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" className={classes.appbar}>
+      <AppBar position="static" color="secondary" className={classes.appBar}>
         <Toolbar variant="dense">
-          <Grid container spacing={2} direction='row' justify='center' alignItems='center' >
+          <Grid
+            container
+            spacing={2}
+            direction="row"
+            justify="center"
+            alignItems="center"
+          >
             <Grid item xs={3} sm={2}>
-              <Typography variant="h5" component={PAGES.LANDING.link} color="inherit" className={classes.title}>
+              <Typography
+                variant="h5"
+                component={PAGES.LANDING.link}
+                color="inherit"
+                className={classes.title}
+              >
                 daddit
               </Typography>
             </Grid>
 
-            <Grid item xs={6} sm={8} md={9} />
+            <Grid item xs={6} sm={8} className={classes.iconHolder}>
+              {user && Object.values(PAGES)
+                .filter(page => page.navBar)
+                .map(page => (
+                  <Tooltip key={page.title} title={page.title}>
+                    <IconButton
+                      color={pathname === page.path ? "primary" : "inherit"}
+                      component={page.link}
+                    >
+                      {page.icon}
+                    </IconButton>
+                  </Tooltip>
+                ))}
+            </Grid>
 
-            <Grid item xs={3} sm={2} md={1} className={classes.buttonHolder}>
+            <Grid item xs={3} sm={2} className={classes.buttonHolder}>
               <div className={classes.spaceEater} />
-              {user ?
+              {user ? (
                 <UserAvatar user={user} />
-                :
-                <Button color='inherit' component={PAGES.LOGIN.link} >
+              ) : (
+                <Button color="inherit" component={PAGES.LOGIN.link}>
                   {PAGES.LOGIN.title}
                 </Button>
-              }
+              )}
             </Grid>
           </Grid>
         </Toolbar>
