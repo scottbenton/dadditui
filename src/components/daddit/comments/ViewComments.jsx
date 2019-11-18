@@ -27,7 +27,6 @@ export function ViewComments(props) {
 
       let comment = { ...commentNoAuthor };
       comment.authorDisplayName = await authorPromise;
-
       replyPromises && (await Promise.all(replyPromises));
       updateCommentByID(commentID, comment);
     };

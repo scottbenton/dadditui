@@ -5,6 +5,7 @@ import Typography from "@material-ui/core/Typography";
 import { OpenButton } from "components/shared/OpenButton";
 import { DialogWrapper } from "components/shared/DialogWrapper";
 import { CreateComment } from "components/daddit/comments/CreateComment";
+import { UpvoteDownvote } from "./UpvoteDownvote";
 
 const useStyles = makeStyles(theme => ({
   comment: props => ({
@@ -14,7 +15,10 @@ const useStyles = makeStyles(theme => ({
     marginRight: 0,
     backgroundColor:
       props.commentDepth % 2 === 1 ? "#e6e6e6" : theme.palette.background.paper
-  })
+  }),
+  content: {
+    display: "flex"
+  }
 }));
 
 export function CommentSection(props) {
@@ -34,8 +38,13 @@ export function CommentSection(props) {
     <>
       {currentComment && (
         <div className={classes.comment}>
-          <Typography>{currentComment.text}</Typography>
-          <Typography>{"-" + currentComment.authorDisplayName}</Typography>
+          <div className={classes.content}>
+            <UpvoteDownvote commentID={commentID} comment={currentComment} />
+            <div>
+              <Typography>{currentComment.text}</Typography>
+              <Typography>{"-" + currentComment.authorDisplayName}</Typography>
+            </div>
+          </div>
           <div className="ActionsHolder">
             <OpenButton buttonContent="reply">
               <DialogWrapper title="replying">
